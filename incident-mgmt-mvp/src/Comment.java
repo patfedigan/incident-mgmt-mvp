@@ -16,7 +16,11 @@ public class Comment {
         this.createdAt = LocalDateTime.now();
     }
     
+    public String getId() { return id; }
+    public String getContent() { return content; }
+    public String getAuthorId() { return authorId; }
     public String getIncidentId() { return incidentId; }
+    public LocalDateTime getCreatedAt() { return createdAt; }
     
     // Getters and setters
 } 

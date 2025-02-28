@@ -44,7 +44,10 @@ public class Incident {
     public void setStatus(Status status) { this.status = status; }
     public String getAssignedTo() { return assignedTo; }
     public void setAssignedTo(String assignedTo) { this.assignedTo = assignedTo; }
+    public LocalDateTime getCreatedAt() { return createdAt; }
     public List<Comment> getComments() { return comments; }
+    public LocalDateTime getUpdatedAt() { return updatedAt; }
+    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
     
     // Getters and setters
 } 

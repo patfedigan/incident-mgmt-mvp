@@ -1,3 +1,10 @@
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 public class IncidentRepository {
     private Map<String, Incident> incidents = new HashMap<>();
     
@@ -14,7 +21,7 @@ public class IncidentRepository {
         return new ArrayList<>(incidents.values());
     }
     
-    public List<Incident> findByStatus(Status status) {
+    public List<Incident> findByStatus(Incident.Status status) {
         return incidents.values().stream()
             .filter(i -> i.getStatus() == status)
             .collect(Collectors.toList());

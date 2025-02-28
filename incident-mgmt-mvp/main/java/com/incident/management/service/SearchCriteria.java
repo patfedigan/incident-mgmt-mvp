@@ -1,3 +1,4 @@
+package management.service;
 public class SearchCriteria {
     private Incident.Status status;
     private Incident.Priority priority;

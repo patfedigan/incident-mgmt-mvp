@@ -1,3 +1,4 @@
+package management.service;
 public class IncidentRequest {
     private String title;
     private String description;

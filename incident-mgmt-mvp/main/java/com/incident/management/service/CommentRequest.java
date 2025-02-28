@@ -1,3 +1,4 @@
+package management.service;
 public class CommentRequest {
     private String content;
     private String authorId;

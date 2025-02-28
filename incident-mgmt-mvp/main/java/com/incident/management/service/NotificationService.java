@@ -1,3 +1,4 @@
+package management.service;
 public class NotificationService {
     public void notifyAssignment(Incident incident, String userId) {
         System.out.println("Notification: Incident " + incident.getId() + 

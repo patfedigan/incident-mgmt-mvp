@@ -1,3 +1,4 @@
+package management.service;
 public class Main {
     public static void main(String[] args) {
         IncidentManager manager = new IncidentManager();
@@ -5,7 +6,7 @@ public class Main {
         // Create a new incident
         IncidentRequest request = new IncidentRequest(
             "System Outage",
-            "Production system is down",
+            "Production system is down", 
             Incident.Priority.CRITICAL,
             "john.doe"
         );

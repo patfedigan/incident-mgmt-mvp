@@ -1,41 +1,64 @@
 import React, { useState } from 'react';
-import logo from './logo.svg';
+import IncidentList from './components/IncidentList';
+import IncidentForm from './components/IncidentForm';
 import './App.css';
 
 function App() {
-  const [count, setCount] = useState(0);
+  const [view, setView] = useState('list'); // 'list' or 'form'
+  const [editingIncident, setEditingIncident] = useState(null);
 
-  const sayHello = () => {
-    alert("Hello World!");
+  const handleCreateNew = () => {
+    setEditingIncident(null);
+    setView('form');
   };
 
-  const incrementCount = () => {
-    setCount(count + 1);
-    alert(`Hello World ${count + 1}!`);
+  const handleEditIncident = (incident) => {
+    setEditingIncident(incident);
+    setView('form');
+  };
+
+  const handleViewIncident = (incident) => {
+    // For now, just edit the incident. You could create a separate view component
+    handleEditIncident(incident);
+  };
+
+  const handleFormSubmit = (incident) => {
+    // Refresh the list and go back to list view
+    setView('list');
+    setEditingIncident(null);
+    // You might want to trigger a refresh of the incident list here
+  };
+
+  const handleFormCancel = () => {
+    setView('list');
+    setEditingIncident(null);
   };
 
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <button onClick={sayHello} className="App-button">
-          Click Me!
-        </button>
-        <button onClick={incrementCount} className="App-button">
-          Increment Counter
-        </button>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <h1>Incident Management System</h1>
+        {view === 'list' && (
+          <button onClick={handleCreateNew} className="create-button">
+            Create New Incident
+          </button>
+        )}
       </header>
+      
+      <main className="App-main">
+        {view === 'list' ? (
+          <IncidentList 
+            onEditIncident={handleEditIncident}
+            onViewIncident={handleViewIncident}
+          />
+        ) : (
+          <IncidentForm 
+            incident={editingIncident}
+            onSubmit={handleFormSubmit}
+            onCancel={handleFormCancel}
+          />
+        )}
+      </main>
     </div>
   );
 }

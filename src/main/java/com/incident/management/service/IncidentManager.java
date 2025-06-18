@@ -74,4 +74,19 @@ public class IncidentManager {
                (criteria.getPriority() == null || incident.getPriority() == criteria.getPriority()) &&
                (criteria.getAssignedTo() == null || incident.getAssignedTo().equals(criteria.getAssignedTo()));
     }
+    
+    public List<Incident> getAllIncidents() {
+        return incidentRepository.findAll();
+    }
+    
+    public Incident getIncidentById(String id) {
+        return incidentRepository.findById(id)
+            .orElseThrow(() -> new IncidentNotFoundException(id));
+    }
+    
+    public void deleteIncident(String id) {
+        Incident incident = incidentRepository.findById(id)
+            .orElseThrow(() -> new IncidentNotFoundException(id));
+        incidentRepository.delete(id);
+    }
 } 

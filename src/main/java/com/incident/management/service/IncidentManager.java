@@ -89,8 +89,6 @@ public class IncidentManager {
     }
     
     public void deleteIncident(String id) {
-        Incident incident = incidentRepository.findById(id)
-            .orElseThrow(() -> new IncidentNotFoundException(id));
         incidentRepository.delete(id);
     }
 } 

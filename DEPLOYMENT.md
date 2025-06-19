@@ -1,38 +1,8 @@
 # Deployment Guide
 
-## 🚀 Auto-Deployment Options
+## 🚀 GitHub Pages Auto-Deployment (Recommended)
 
-### Option 1: Vercel Auto-Deployment (Recommended)
-
-**Setup:**
-1. **Connect to Vercel:**
-   - Go to [vercel.com](https://vercel.com)
-   - Sign in with GitHub
-   - Click "New Project"
-   - Import your GitHub repository
-   - Vercel will auto-detect the React app
-
-2. **Configuration:**
-   - Framework Preset: `Create React App`
-   - Root Directory: `incident-mgmt-ui`
-   - Build Command: `npm run build`
-   - Output Directory: `build`
-   - Install Command: `npm install`
-
-3. **Deploy:**
-   - Click "Deploy"
-   - Vercel will automatically deploy on every push to main branch
-
-**Benefits:**
-- ✅ Automatic deployments on every push
-- ✅ Preview deployments for pull requests
-- ✅ Global CDN
-- ✅ Custom domains
-- ✅ Analytics included
-
-### Option 2: GitHub Pages Auto-Deployment
-
-**Setup:**
+### Setup:
 1. **Enable GitHub Actions:**
    - The workflow is already configured in `.github/workflows/deploy.yml`
    - Push to main branch to trigger deployment
@@ -46,56 +16,11 @@
 3. **Your app will be live at:**
    `https://patfedigan.github.io/incident-mgmt-mvp`
 
-## 🔄 Switching Between Vercel and GitHub Pages
-
-### To Disable Vercel and Use GitHub Pages:
-
-1. **Remove Vercel Configuration:**
-   ```bash
-   rm vercel.json
-   ```
-
-2. **Update package.json for GitHub Pages:**
-   ```json
-   {
-     "homepage": "https://patfedigan.github.io/incident-mgmt-mvp",
-     "scripts": {
-       "deploy": "gh-pages -d build"
-     }
-   }
-   ```
-
-3. **Disconnect from Vercel:**
-   - Go to Vercel dashboard
-   - Select your project
-   - Settings → General → Delete Project
-
-4. **Use GitHub Pages:**
-   ```bash
-   cd incident-mgmt-ui
-   npm run deploy
-   ```
-
-### To Disable GitHub Pages and Use Vercel:
-
-1. **Remove GitHub Pages workflow:**
-   ```bash
-   rm .github/workflows/deploy.yml
-   ```
-
-2. **Remove homepage from package.json:**
-   ```json
-   {
-     "scripts": {
-       "vercel-build": "npm run build"
-     }
-   }
-   ```
-
-3. **Disable GitHub Pages:**
-   - Go to repository Settings → Pages
-   - Source: None
-   - Save
+**Benefits:**
+- ✅ Automatic deployments on every push
+- ✅ Free hosting
+- ✅ Integrated with GitHub
+- ✅ Custom domain support
 
 ## 📝 Manual Deployment Options
 
@@ -106,18 +31,11 @@ npm install gh-pages --save-dev
 npm run deploy
 ```
 
-### Netlify (Manual)
+### Netlify (Alternative)
 ```bash
 cd incident-mgmt-ui
 npm run build
 # Drag build/ folder to netlify.com
-```
-
-### Vercel (Manual)
-```bash
-npm install -g vercel
-cd incident-mgmt-ui
-vercel
 ```
 
 ## 🎯 Demo Features
@@ -132,14 +50,69 @@ The demo showcases:
 
 ## 🔧 Troubleshooting
 
-### Vercel Issues:
-- Check build logs in Vercel dashboard
-- Ensure `vercel.json` is in root directory
-- Verify build command works locally
-
 ### GitHub Pages Issues:
 - Check Actions tab for build status
 - Ensure `gh-pages` branch is created
 - Verify repository settings
+- Check if homepage URL is correct in package.json
+
+### Manual Deployment Issues:
+- Ensure `gh-pages` package is installed
+- Check if build directory exists
+- Verify GitHub Pages is enabled in repository settings
 
 Perfect for portfolio showcases and technical demonstrations! 
+
+## ✅ **Vercel Completely Removed from Repository**
+
+### **What I've Done:**
+1. **✅ Deleted `vercel.json`** - Removed Vercel configuration
+2. **✅ Updated `package.json`** - Removed Vercel scripts, added GitHub Pages homepage
+3. **✅ Updated `DEPLOYMENT.md`** - Removed all Vercel references
+4. **✅ Verified no Vercel references remain** in the codebase
+
+### **Additional Steps to Complete Vercel Removal:**
+
+#### **Step 1: Disconnect from Vercel Dashboard**
+1. Go to [vercel.com/dashboard](https://vercel.com/dashboard)
+2. Find your project: `incident-mgmt-mvp`
+3. Click on the project
+4. Go to **Settings** → **General**
+5. Scroll down and click **Delete Project**
+6. Confirm deletion
+
+#### **Step 2: Remove Vercel Integration from GitHub**
+1. Go to your GitHub repository
+2. Click **Settings** tab
+3. Click **Integrations** in the left sidebar
+4. Find **Vercel** in the list
+5. Click **Configure** or **Remove**
+6. Remove the integration
+
+#### **Step 3: Enable GitHub Pages (Alternative)**
+1. Go to your GitHub repository
+2. Click **Settings** → **Pages**
+3. Source: **Deploy from a branch**
+4. Branch: **gh-pages**
+5. Click **Save**
+
+### **🎯 Your Repository Now:**
+- **✅ No Vercel configuration files**
+- **✅ Ready for GitHub Pages deployment**
+- **✅ GitHub Actions workflow configured**
+- **✅ Clean, Vercel-free codebase**
+
+### **🚀 To Deploy with GitHub Pages:**
+```bash
+# Push your changes
+git add .
+git commit -m "Remove Vercel, configure GitHub Pages"
+git push origin main
+
+# The GitHub Actions workflow will automatically deploy
+# Or manually deploy:
+cd incident-mgmt-ui
+npm run deploy
+```
+
+Your repository is now **completely free of Vercel** and ready for GitHub Pages deployment! 🎉 

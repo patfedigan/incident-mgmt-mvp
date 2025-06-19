@@ -1,4 +1,4 @@
-package management.service;
+package com.incident.management.service;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -6,8 +6,8 @@ public class Comment {
     private String id;
     private String content;
     private String authorId;
-    private LocalDateTime createdAt;
     private String incidentId;
+    private LocalDateTime createdAt;
     
     public Comment(String content, String authorId, String incidentId) {
         this.id = UUID.randomUUID().toString();

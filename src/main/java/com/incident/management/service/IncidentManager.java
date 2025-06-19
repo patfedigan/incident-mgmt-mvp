@@ -1,14 +1,18 @@
-package management.service;
+package com.incident.management.service;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class IncidentManager {
     private final IncidentRepository incidentRepository;
     private final NotificationService notificationService;
     
-    public IncidentManager() {
-        this.incidentRepository = new IncidentRepository();
-        this.notificationService = new NotificationService();
+    @Autowired
+    public IncidentManager(IncidentRepository incidentRepository, NotificationService notificationService) {
+        this.incidentRepository = incidentRepository;
+        this.notificationService = notificationService;
     }
     
     public Incident createIncident(IncidentRequest request) {

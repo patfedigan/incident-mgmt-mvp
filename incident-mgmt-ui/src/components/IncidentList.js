@@ -13,14 +13,16 @@ const IncidentList = ({ onEditIncident, onViewIncident }) => {
   const fetchIncidents = async () => {
     try {
       setLoading(true);
+      setError(null);
       const response = await fetch('http://localhost:8080/api/incidents');
       if (!response.ok) {
-        throw new Error('Failed to fetch incidents');
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
       setIncidents(data);
     } catch (err) {
-      setError(err.message);
+      console.error('Error fetching incidents:', err);
+      setError(`Failed to fetch incidents: ${err.message}. Make sure the backend server is running on port 8080.`);
     } finally {
       setLoading(false);
     }

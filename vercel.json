@@ -1,0 +1,20 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "incident-mgmt-ui/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "build"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/incident-mgmt-ui/$1"
+    }
+  ],
+  "buildCommand": "cd incident-mgmt-ui && npm install && npm run build",
+  "outputDirectory": "incident-mgmt-ui/build"
+} 

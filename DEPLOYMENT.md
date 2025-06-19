@@ -1,94 +1,124 @@
 # Deployment Guide
 
-## 🚀 Quick Showcase on GitHub
+## 🚀 Auto-Deployment Options
 
-### Option 1: GitHub Pages (Recommended for Demo)
+### Option 1: Vercel Auto-Deployment (Recommended)
 
-1. **Install gh-pages package:**
+**Setup:**
+1. **Connect to Vercel:**
+   - Go to [vercel.com](https://vercel.com)
+   - Sign in with GitHub
+   - Click "New Project"
+   - Import your GitHub repository
+   - Vercel will auto-detect the React app
+
+2. **Configuration:**
+   - Framework Preset: `Create React App`
+   - Root Directory: `incident-mgmt-ui`
+   - Build Command: `npm run build`
+   - Output Directory: `build`
+   - Install Command: `npm install`
+
+3. **Deploy:**
+   - Click "Deploy"
+   - Vercel will automatically deploy on every push to main branch
+
+**Benefits:**
+- ✅ Automatic deployments on every push
+- ✅ Preview deployments for pull requests
+- ✅ Global CDN
+- ✅ Custom domains
+- ✅ Analytics included
+
+### Option 2: GitHub Pages Auto-Deployment
+
+**Setup:**
+1. **Enable GitHub Actions:**
+   - The workflow is already configured in `.github/workflows/deploy.yml`
+   - Push to main branch to trigger deployment
+
+2. **Enable GitHub Pages:**
+   - Go to repository Settings → Pages
+   - Source: Deploy from a branch
+   - Branch: `gh-pages`
+   - Save
+
+3. **Your app will be live at:**
+   `https://patfedigan.github.io/incident-mgmt-mvp`
+
+## 🔄 Switching Between Vercel and GitHub Pages
+
+### To Disable Vercel and Use GitHub Pages:
+
+1. **Remove Vercel Configuration:**
    ```bash
-   cd incident-mgmt-ui
-   npm install gh-pages --save-dev
+   rm vercel.json
    ```
 
-2. **Deploy to GitHub Pages:**
+2. **Update package.json for GitHub Pages:**
+   ```json
+   {
+     "homepage": "https://patfedigan.github.io/incident-mgmt-mvp",
+     "scripts": {
+       "deploy": "gh-pages -d build"
+     }
+   }
+   ```
+
+3. **Disconnect from Vercel:**
+   - Go to Vercel dashboard
+   - Select your project
+   - Settings → General → Delete Project
+
+4. **Use GitHub Pages:**
    ```bash
+   cd incident-mgmt-ui
    npm run deploy
    ```
 
-3. **Enable GitHub Pages:**
-   - Go to your GitHub repository
-   - Settings → Pages
-   - Source: Deploy from a branch
-   - Branch: gh-pages
+### To Disable GitHub Pages and Use Vercel:
+
+1. **Remove GitHub Pages workflow:**
+   ```bash
+   rm .github/workflows/deploy.yml
+   ```
+
+2. **Remove homepage from package.json:**
+   ```json
+   {
+     "scripts": {
+       "vercel-build": "npm run build"
+     }
+   }
+   ```
+
+3. **Disable GitHub Pages:**
+   - Go to repository Settings → Pages
+   - Source: None
    - Save
 
-4. **Your app will be live at:**
-   `https://patfedigan.github.io/incident-mgmt-mvp`
+## 📝 Manual Deployment Options
 
-### Option 2: Netlify (Alternative)
+### GitHub Pages (Manual)
+```bash
+cd incident-mgmt-ui
+npm install gh-pages --save-dev
+npm run deploy
+```
 
-1. **Build the app:**
-   ```bash
-   cd incident-mgmt-ui
-   npm run build
-   ```
+### Netlify (Manual)
+```bash
+cd incident-mgmt-ui
+npm run build
+# Drag build/ folder to netlify.com
+```
 
-2. **Deploy to Netlify:**
-   - Drag and drop the `build/` folder to [netlify.com](https://netlify.com)
-   - Or connect your GitHub repository
-
-### Option 3: Vercel (Alternative)
-
-1. **Install Vercel CLI:**
-   ```bash
-   npm install -g vercel
-   ```
-
-2. **Deploy:**
-   ```bash
-   cd incident-mgmt-ui
-   vercel
-   ```
-
-## 📝 What Works in Demo Mode
-
-✅ **Incident List View** - Shows 5 sample incidents  
-✅ **Priority Badges** - Color-coded (CRITICAL, HIGH, MEDIUM, LOW)  
-✅ **Status Badges** - Shows current status  
-✅ **Responsive Design** - Works on mobile and desktop  
-✅ **Modern UI** - Clean, professional interface  
-
-## 🔧 Full Stack Deployment
-
-### Heroku (Backend + Frontend)
-
-1. **Add Procfile:**
-   ```bash
-   echo "web: java -jar target/incident-management-0.0.1-SNAPSHOT.jar" > Procfile
-   ```
-
-2. **Build and deploy:**
-   ```bash
-   mvn clean package
-   heroku create your-app-name
-   git push heroku main
-   ```
-
-### Docker (Local/Cloud)
-
-1. **Create Dockerfile:**
-   ```dockerfile
-   FROM openjdk:11-jre-slim
-   COPY target/incident-management-0.0.1-SNAPSHOT.jar app.jar
-   EXPOSE 8080
-   ENTRYPOINT ["java", "-jar", "/app.jar"]
-   ```
-
-2. **Build and run:**
-   ```bash
-   docker build -t incident-mgmt .
-   docker run -p 8080:8080 incident-mgmt
-   ```
+### Vercel (Manual)
+```bash
+npm install -g vercel
+cd incident-mgmt-ui
+vercel
+```
 
 ## 🎯 Demo Features
 
@@ -98,5 +128,18 @@ The demo showcases:
 - **Priority and status management**
 - **Professional styling** and user experience
 - **Backend-ready** architecture
+- **Auto-deployment** on every push
+
+## 🔧 Troubleshooting
+
+### Vercel Issues:
+- Check build logs in Vercel dashboard
+- Ensure `vercel.json` is in root directory
+- Verify build command works locally
+
+### GitHub Pages Issues:
+- Check Actions tab for build status
+- Ensure `gh-pages` branch is created
+- Verify repository settings
 
 Perfect for portfolio showcases and technical demonstrations! 

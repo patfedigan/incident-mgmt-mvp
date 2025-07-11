@@ -59,11 +59,28 @@
   font-size: 0.9em;
   line-height: 1.4;
   color: #495057;
+  position: relative;
 }
 
 .incident-summary strong {
   color: #007bff;
   font-weight: 600;
+}
+
+.streaming-dots {
+  color: #28a745;
+  font-weight: bold;
+  animation: pulse 1.5s ease-in-out infinite;
+  margin-left: 4px;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
 }
 
 .incident-description {
@@ -84,6 +101,7 @@
 .incident-actions {
   display: flex;
   gap: 8px;
+  flex-wrap: wrap;
 }
 
 .incident-actions button {
@@ -92,6 +110,7 @@
   border-radius: 4px;
   cursor: pointer;
   font-size: 0.9em;
+  transition: all 0.2s;
 }
 
 .incident-actions button:first-child {
@@ -99,9 +118,30 @@
   color: white;
 }
 
-.incident-actions button:last-child {
+.incident-actions button:nth-child(2) {
   background-color: #6c757d;
   color: white;
+}
+
+.btn-summarize {
+  background-color: #28a745 !important;
+  color: white !important;
+  border: 1px solid #28a745 !important;
+  font-weight: 500;
+}
+
+.btn-summarize:hover:not(:disabled) {
+  background-color: #218838 !important;
+  border-color: #1e7e34 !important;
+  transform: translateY(-1px);
+}
+
+.btn-summarize:disabled {
+  background-color: #6c757d !important;
+  border-color: #6c757d !important;
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
 }
 
 .loading, .error {

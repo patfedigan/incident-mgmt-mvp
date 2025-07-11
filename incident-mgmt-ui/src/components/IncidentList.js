@@ -71,10 +71,31 @@ const IncidentList = ({ onEditIncident, onViewIncident }) => {
   const [error, setError] = useState(null);
   const [useMockData, setUseMockData] = useState(false);
   const [summarizingIncidents, setSummarizingIncidents] = useState(new Set());
+  const [streamingDots, setStreamingDots] = useState({});
 
   useEffect(() => {
     fetchIncidents();
   }, []);
+
+  // Streaming dots animation effect
+  useEffect(() => {
+    const intervals = {};
+    
+    summarizingIncidents.forEach(incidentId => {
+      let dotCount = 0;
+      intervals[incidentId] = setInterval(() => {
+        dotCount = (dotCount + 1) % 4;
+        setStreamingDots(prev => ({
+          ...prev,
+          [incidentId]: '.'.repeat(dotCount)
+        }));
+      }, 500);
+    });
+
+    return () => {
+      Object.values(intervals).forEach(interval => clearInterval(interval));
+    };
+  }, [summarizingIncidents]);
 
   const fetchIncidents = async () => {
     try {
@@ -104,19 +125,39 @@ const IncidentList = ({ onEditIncident, onViewIncident }) => {
       // For mock data, simulate AI summarization
       setSummarizingIncidents(prev => new Set(prev).add(incidentId));
       
-      // Simulate streaming response
+      // Simulate streaming response with progressive text
+      const mockSummaries = [
+        "Analyzing incident data",
+        "Analyzing incident data and context",
+        "Analyzing incident data and context to generate",
+        "Analyzing incident data and context to generate comprehensive summary",
+        "AI-generated summary: This incident has been analyzed and summarized using advanced AI techniques."
+      ];
+      
+      mockSummaries.forEach((summary, index) => {
+        setTimeout(() => {
+          setIncidents(prev => prev.map(incident => 
+            incident.id === incidentId 
+              ? { ...incident, summary }
+              : incident
+          ));
+        }, index * 800);
+      });
+      
+      // Complete after all summaries
       setTimeout(() => {
-        setIncidents(prev => prev.map(incident => 
-          incident.id === incidentId 
-            ? { ...incident, summary: "AI-generated summary: This incident has been analyzed and summarized using advanced AI techniques." }
-            : incident
-        ));
         setSummarizingIncidents(prev => {
           const newSet = new Set(prev);
           newSet.delete(incidentId);
           return newSet;
         });
-      }, 2000);
+        setStreamingDots(prev => {
+          const newDots = { ...prev };
+          delete newDots[incidentId];
+          return newDots;
+        });
+      }, mockSummaries.length * 800);
+      
       return;
     }
 
@@ -150,6 +191,11 @@ const IncidentList = ({ onEditIncident, onViewIncident }) => {
         const newSet = new Set(prev);
         newSet.delete(incidentId);
         return newSet;
+      });
+      setStreamingDots(prev => {
+        const newDots = { ...prev };
+        delete newDots[incidentId];
+        return newDots;
       });
     }
   };
@@ -189,6 +235,7 @@ const IncidentList = ({ onEditIncident, onViewIncident }) => {
       <div className="incident-grid">
         {incidents.map((incident) => {
           const isSummarizing = summarizingIncidents.has(incident.id);
+          const dots = streamingDots[incident.id] || '';
           
           return (
             <div key={incident.id} className="incident-card">
@@ -212,6 +259,7 @@ const IncidentList = ({ onEditIncident, onViewIncident }) => {
               {incident.summary && (
                 <div className="incident-summary">
                   <strong>Summary:</strong> {incident.summary}
+                  {isSummarizing && <span className="streaming-dots">{dots}</span>}
                 </div>
               )}
               <p className="incident-description">{incident.description}</p>
@@ -227,7 +275,7 @@ const IncidentList = ({ onEditIncident, onViewIncident }) => {
                   disabled={isSummarizing}
                   className="btn-summarize"
                 >
-                  {isSummarizing ? '🤖 Summarizing...' : '🤖 Summarize with AI'}
+                  {isSummarizing ? `🤖 Summarizing${dots}` : '🤖 Summarize with AI'}
                 </button>
               </div>
             </div>

@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class SummarizationService {
@@ -74,14 +73,15 @@ public class SummarizationService {
         HttpEntity<Map<String, Object>> request = new HttpEntity<>(requestBody, headers);
         
         try {
-            ResponseEntity<Map> response = restTemplate.postForEntity(openaiApiUrl, request, Map.class);
-            Map responseBody = response.getBody();
+            ResponseEntity<Map<String, Object>> response = restTemplate.postForEntity(openaiApiUrl, request, (Class<Map<String, Object>>)(Class<?>)Map.class);
+            Map<String, Object> responseBody = response.getBody();
             
             if (responseBody != null && responseBody.containsKey("choices")) {
-                List<Map> choices = (List<Map>) responseBody.get("choices");
+                @SuppressWarnings("unchecked")
+                List<Map<String, Object>> choices = (List<Map<String, Object>>) responseBody.get("choices");
                 if (!choices.isEmpty()) {
-                    Map choice = choices.get(0);
-                    Map message = (Map) choice.get("message");
+                    Map<String, Object> choice = choices.get(0);
+                    Map<String, Object> message = (Map<String, Object>) choice.get("message");
                     return (String) message.get("content");
                 }
             }

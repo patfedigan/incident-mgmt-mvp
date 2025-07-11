@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/incident-mgmt-mvp/static/css/main.df508299.css",
+    "main.js": "/incident-mgmt-mvp/static/js/main.86eae1fd.js",
+    "static/js/488.9582af3f.chunk.js": "/incident-mgmt-mvp/static/js/488.9582af3f.chunk.js",
+    "index.html": "/incident-mgmt-mvp/index.html",
+    "main.df508299.css.map": "/incident-mgmt-mvp/static/css/main.df508299.css.map",
+    "main.86eae1fd.js.map": "/incident-mgmt-mvp/static/js/main.86eae1fd.js.map",
+    "488.9582af3f.chunk.js.map": "/incident-mgmt-mvp/static/js/488.9582af3f.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.df508299.css",
+    "static/js/main.86eae1fd.js"
+  ]
+}

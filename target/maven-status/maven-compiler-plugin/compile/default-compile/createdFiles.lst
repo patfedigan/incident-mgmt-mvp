@@ -1,5 +1,6 @@
 com/incident/management/config/AppConfig.class
 com/incident/management/service/CommentRequest.class
+com/incident/management/controller/IncidentController$1.class
 com/incident/management/service/IncidentRepository.class
 com/incident/management/service/IncidentRequest.class
 com/incident/management/service/Incident$Status.class
@@ -10,5 +11,6 @@ com/incident/management/service/Comment.class
 com/incident/management/service/SearchCriteria.class
 com/incident/management/service/IncidentNotFoundException.class
 com/incident/management/controller/IncidentController.class
+com/incident/management/service/SummarizationService.class
 com/incident/management/service/Incident$Priority.class
 com/incident/management/IncidentManagementApplication.class

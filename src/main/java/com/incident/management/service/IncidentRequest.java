@@ -5,6 +5,7 @@ public class IncidentRequest {
     private String description;
     private Incident.Priority priority;
     private String assignedTo;
+    private String summary;
 
     public String getTitle() { return title; }
     public void setTitle(String title) { this.title = title; }
@@ -14,4 +15,6 @@ public class IncidentRequest {
     public void setPriority(Incident.Priority priority) { this.priority = priority; }
     public String getAssignedTo() { return assignedTo; }
     public void setAssignedTo(String assignedTo) { this.assignedTo = assignedTo; }
+    public String getSummary() { return summary; }
+    public void setSummary(String summary) { this.summary = summary; }
 } 

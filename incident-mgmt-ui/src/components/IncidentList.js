@@ -12,7 +12,8 @@ const mockIncidents = [
     assignedTo: "john.doe@company.com",
     createdAt: "2025-06-18T10:00:00.000Z",
     updatedAt: "2025-06-18T10:00:00.000Z",
-    comments: []
+    comments: [],
+    summary: "Critical database connection failure affecting user login. Currently in progress with high priority."
   },
   {
     id: "2",
@@ -23,7 +24,8 @@ const mockIncidents = [
     assignedTo: "sarah.smith@company.com",
     createdAt: "2025-06-18T09:30:00.000Z",
     updatedAt: "2025-06-18T09:30:00.000Z",
-    comments: []
+    comments: [],
+    summary: "SMTP server unresponsive causing email delivery failures. High priority issue assigned to Sarah Smith."
   },
   {
     id: "3",
@@ -34,7 +36,8 @@ const mockIncidents = [
     assignedTo: "mike.johnson@company.com",
     createdAt: "2025-06-18T08:45:00.000Z",
     updatedAt: "2025-06-18T08:45:00.000Z",
-    comments: []
+    comments: [],
+    summary: "Dashboard performance issues on mobile devices. Medium priority, pending investigation."
   },
   {
     id: "4",
@@ -45,7 +48,8 @@ const mockIncidents = [
     assignedTo: "admin@company.com",
     createdAt: "2025-06-18T07:15:00.000Z",
     updatedAt: "2025-06-18T07:15:00.000Z",
-    comments: []
+    comments: [],
+    summary: "Password reset functionality was broken but has been resolved. High priority issue now closed."
   },
   {
     id: "5",
@@ -56,7 +60,8 @@ const mockIncidents = [
     assignedTo: "tech.support@company.com",
     createdAt: "2025-06-18T06:20:00.000Z",
     updatedAt: "2025-06-18T06:20:00.000Z",
-    comments: []
+    comments: [],
+    summary: "File upload limitation affecting files over 10MB. Low priority issue assigned to tech support."
   }
 ];
 
@@ -65,6 +70,7 @@ const IncidentList = ({ onEditIncident, onViewIncident }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [useMockData, setUseMockData] = useState(false);
+  const [summarizingIncidents, setSummarizingIncidents] = useState(new Set());
 
   useEffect(() => {
     fetchIncidents();
@@ -90,6 +96,61 @@ const IncidentList = ({ onEditIncident, onViewIncident }) => {
       setUseMockData(true);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleSummarize = async (incidentId) => {
+    if (useMockData) {
+      // For mock data, simulate AI summarization
+      setSummarizingIncidents(prev => new Set(prev).add(incidentId));
+      
+      // Simulate streaming response
+      setTimeout(() => {
+        setIncidents(prev => prev.map(incident => 
+          incident.id === incidentId 
+            ? { ...incident, summary: "AI-generated summary: This incident has been analyzed and summarized using advanced AI techniques." }
+            : incident
+        ));
+        setSummarizingIncidents(prev => {
+          const newSet = new Set(prev);
+          newSet.delete(incidentId);
+          return newSet;
+        });
+      }, 2000);
+      return;
+    }
+
+    try {
+      setSummarizingIncidents(prev => new Set(prev).add(incidentId));
+      
+      const response = await fetch(`http://localhost:8080/api/incidents/${incidentId}/regenerate-summary`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        
+        // Update the incident with new summary
+        setIncidents(prev => prev.map(incident => 
+          incident.id === incidentId 
+            ? { ...incident, summary: data.summary }
+            : incident
+        ));
+      } else {
+        throw new Error('Failed to generate summary');
+      }
+    } catch (error) {
+      console.error('Error generating summary:', error);
+      alert('Failed to generate summary: ' + error.message);
+    } finally {
+      setSummarizingIncidents(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(incidentId);
+        return newSet;
+      });
     }
   };
 
@@ -126,36 +187,52 @@ const IncidentList = ({ onEditIncident, onViewIncident }) => {
         </div>
       )}
       <div className="incident-grid">
-        {incidents.map((incident) => (
-          <div key={incident.id} className="incident-card">
-            <div className="incident-header">
-              <h3>{incident.title}</h3>
-              <div className="incident-badges">
-                <span 
-                  className="priority-badge" 
-                  style={{ backgroundColor: getPriorityColor(incident.priority) }}
+        {incidents.map((incident) => {
+          const isSummarizing = summarizingIncidents.has(incident.id);
+          
+          return (
+            <div key={incident.id} className="incident-card">
+              <div className="incident-header">
+                <h3>{incident.title}</h3>
+                <div className="incident-badges">
+                  <span 
+                    className="priority-badge" 
+                    style={{ backgroundColor: getPriorityColor(incident.priority) }}
+                  >
+                    {incident.priority}
+                  </span>
+                  <span 
+                    className="status-badge" 
+                    style={{ backgroundColor: getStatusColor(incident.status) }}
+                  >
+                    {incident.status}
+                  </span>
+                </div>
+              </div>
+              {incident.summary && (
+                <div className="incident-summary">
+                  <strong>Summary:</strong> {incident.summary}
+                </div>
+              )}
+              <p className="incident-description">{incident.description}</p>
+              <div className="incident-meta">
+                <span>Assigned to: {incident.assignedTo}</span>
+                <span>Created: {new Date(incident.createdAt).toLocaleDateString()}</span>
+              </div>
+              <div className="incident-actions">
+                <button onClick={() => onViewIncident(incident)}>View</button>
+                <button onClick={() => onEditIncident(incident)}>Edit</button>
+                <button 
+                  onClick={() => handleSummarize(incident.id)}
+                  disabled={isSummarizing}
+                  className="btn-summarize"
                 >
-                  {incident.priority}
-                </span>
-                <span 
-                  className="status-badge" 
-                  style={{ backgroundColor: getStatusColor(incident.status) }}
-                >
-                  {incident.status}
-                </span>
+                  {isSummarizing ? '🤖 Summarizing...' : '🤖 Summarize with AI'}
+                </button>
               </div>
             </div>
-            <p className="incident-description">{incident.description}</p>
-            <div className="incident-meta">
-              <span>Assigned to: {incident.assignedTo}</span>
-              <span>Created: {new Date(incident.createdAt).toLocaleDateString()}</span>
-            </div>
-            <div className="incident-actions">
-              <button onClick={() => onViewIncident(incident)}>View</button>
-              <button onClick={() => onEditIncident(incident)}>Edit</button>
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

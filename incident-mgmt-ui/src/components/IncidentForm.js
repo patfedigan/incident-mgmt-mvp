@@ -7,8 +7,10 @@ const IncidentForm = ({ incident, onSubmit, onCancel }) => {
     description: '',
     priority: 'MEDIUM',
     assignedTo: '',
-    status: 'OPEN'
+    status: 'OPEN',
+    summary: ''
   });
+  const [isGeneratingSummary, setIsGeneratingSummary] = useState(false);
 
   useEffect(() => {
     if (incident) {
@@ -17,7 +19,8 @@ const IncidentForm = ({ incident, onSubmit, onCancel }) => {
         description: incident.description || '',
         priority: incident.priority || 'MEDIUM',
         assignedTo: incident.assignedTo || '',
-        status: incident.status || 'OPEN'
+        status: incident.status || 'OPEN',
+        summary: incident.summary || ''
       });
     }
   }, [incident]);
@@ -28,6 +31,35 @@ const IncidentForm = ({ incident, onSubmit, onCancel }) => {
       ...prev,
       [name]: value
     }));
+  };
+
+  const handleRegenerateSummary = async () => {
+    if (!incident) return; // Only for existing incidents
+    
+    setIsGeneratingSummary(true);
+    try {
+      const response = await fetch(`http://localhost:8080/api/incidents/${incident.id}/regenerate-summary`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setFormData(prev => ({
+          ...prev,
+          summary: data.summary
+        }));
+      } else {
+        throw new Error('Failed to regenerate summary');
+      }
+    } catch (error) {
+      console.error('Error regenerating summary:', error);
+      alert('Failed to regenerate summary: ' + error.message);
+    } finally {
+      setIsGeneratingSummary(false);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -132,6 +164,36 @@ const IncidentForm = ({ incident, onSubmit, onCancel }) => {
             </select>
           </div>
         )}
+
+        <div className="form-group">
+          <label htmlFor="summary">Summary</label>
+          <div className="summary-container">
+            <textarea
+              id="summary"
+              name="summary"
+              value={formData.summary}
+              onChange={handleChange}
+              rows="3"
+              placeholder="AI-generated summary will appear here..."
+              readOnly={!incident} // Only editable for existing incidents
+            />
+            {incident && (
+              <button
+                type="button"
+                onClick={handleRegenerateSummary}
+                disabled={isGeneratingSummary}
+                className="btn-regenerate"
+              >
+                {isGeneratingSummary ? 'Generating...' : '🔄 Regenerate'}
+              </button>
+            )}
+          </div>
+          {!incident && (
+            <small className="summary-note">
+              Summary will be automatically generated when incident is created
+            </small>
+          )}
+        </div>
 
         <div className="form-actions">
           <button type="submit" className="btn-primary">

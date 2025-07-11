@@ -8,11 +8,13 @@ import org.springframework.stereotype.Service;
 public class IncidentManager {
     private final IncidentRepository incidentRepository;
     private final NotificationService notificationService;
+    private final SummarizationService summarizationService;
     
     @Autowired
-    public IncidentManager(IncidentRepository incidentRepository, NotificationService notificationService) {
+    public IncidentManager(IncidentRepository incidentRepository, NotificationService notificationService, SummarizationService summarizationService) {
         this.incidentRepository = incidentRepository;
         this.notificationService = notificationService;
+        this.summarizationService = summarizationService;
     }
     
     public Incident createIncident(IncidentRequest request) {
@@ -22,6 +24,14 @@ public class IncidentManager {
             request.getPriority(),
             request.getAssignedTo()
         );
+        
+        // Generate summary if not provided manually
+        if (request.getSummary() != null && !request.getSummary().trim().isEmpty()) {
+            incident.setSummary(request.getSummary());
+        } else {
+            String generatedSummary = summarizationService.generateSummary(incident);
+            incident.setSummary(generatedSummary);
+        }
         
         Incident savedIncident = incidentRepository.save(incident);
         notificationService.notifyAssignment(savedIncident, request.getAssignedTo());
@@ -36,6 +46,14 @@ public class IncidentManager {
         incident.setDescription(request.getDescription());
         incident.setPriority(request.getPriority());
         incident.setAssignedTo(request.getAssignedTo());
+        
+        // Update summary if provided manually, otherwise regenerate
+        if (request.getSummary() != null && !request.getSummary().trim().isEmpty()) {
+            incident.setSummary(request.getSummary());
+        } else {
+            String generatedSummary = summarizationService.generateSummary(incident);
+            incident.setSummary(generatedSummary);
+        }
         
         Incident updatedIncident = incidentRepository.save(incident);
         notificationService.notifyStatusChange(updatedIncident);
@@ -69,6 +87,11 @@ public class IncidentManager {
         );
         
         incident.getComments().add(newComment);
+        
+        // Regenerate summary when new comment is added
+        String updatedSummary = summarizationService.generateSummary(incident);
+        incident.setSummary(updatedSummary);
+        
         incidentRepository.save(incident);
         notificationService.notifyNewComment(incident, newComment);
     }

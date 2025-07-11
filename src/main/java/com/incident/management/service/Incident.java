@@ -14,6 +14,7 @@ public class Incident {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private List<Comment> comments = new ArrayList<>();
+    private String summary;
     
     public enum Priority {
         LOW, MEDIUM, HIGH, CRITICAL
@@ -49,6 +50,8 @@ public class Incident {
     public List<Comment> getComments() { return comments; }
     public LocalDateTime getUpdatedAt() { return updatedAt; }
     public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
+    public String getSummary() { return summary; }
+    public void setSummary(String summary) { this.summary = summary; }
     
     // Getters and setters
 } 

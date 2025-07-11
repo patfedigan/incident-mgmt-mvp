@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/incidents")
@@ -14,6 +15,9 @@ public class IncidentController {
 
     @Autowired
     private IncidentManager incidentManager;
+    
+    @Autowired
+    private SummarizationService summarizationService;
 
     @GetMapping
     public ResponseEntity<List<Incident>> getAllIncidents() {
@@ -71,6 +75,30 @@ public class IncidentController {
             return ResponseEntity.ok(incident);
         } catch (IncidentNotFoundException e) {
             return ResponseEntity.notFound().build();
+        }
+    }
+    
+    @PostMapping("/{id}/regenerate-summary")
+    public ResponseEntity<Map<String, String>> regenerateSummary(@PathVariable String id) {
+        try {
+            Incident incident = incidentManager.getIncidentById(id);
+            String newSummary = summarizationService.generateSummary(incident);
+            
+            // Update the incident with new summary
+            incident.setSummary(newSummary);
+            incidentManager.updateIncident(id, new IncidentRequest() {{
+                setTitle(incident.getTitle());
+                setDescription(incident.getDescription());
+                setPriority(incident.getPriority());
+                setAssignedTo(incident.getAssignedTo());
+                setSummary(newSummary);
+            }});
+            
+            return ResponseEntity.ok(Map.of("summary", newSummary));
+        } catch (IncidentNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
         }
     }
 } 

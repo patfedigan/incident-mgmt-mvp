@@ -1,12 +1,13 @@
 /Users/patrick.fedigan/incident-mgmt-mvp/src/main/java/com/incident/management/service/IncidentRequest.java
-/Users/patrick.fedigan/incident-mgmt-mvp/src/main/java/com/incident/management/service/SearchCriteria.java
 /Users/patrick.fedigan/incident-mgmt-mvp/src/main/java/com/incident/management/service/IncidentNotFoundException.java
-/Users/patrick.fedigan/incident-mgmt-mvp/src/main/java/com/incident/management/config/AppConfig.java
 /Users/patrick.fedigan/incident-mgmt-mvp/src/main/java/com/incident/management/service/IncidentRepository.java
-/Users/patrick.fedigan/incident-mgmt-mvp/src/main/java/com/incident/management/controller/IncidentController.java
 /Users/patrick.fedigan/incident-mgmt-mvp/src/main/java/com/incident/management/service/CommentRequest.java
+/Users/patrick.fedigan/incident-mgmt-mvp/src/main/java/com/incident/management/service/SummarizationService.java
 /Users/patrick.fedigan/incident-mgmt-mvp/src/main/java/com/incident/management/service/NotificationService.java
 /Users/patrick.fedigan/incident-mgmt-mvp/src/main/java/com/incident/management/service/Incident.java
-/Users/patrick.fedigan/incident-mgmt-mvp/src/main/java/com/incident/management/IncidentManagementApplication.java
 /Users/patrick.fedigan/incident-mgmt-mvp/src/main/java/com/incident/management/service/IncidentManager.java
+/Users/patrick.fedigan/incident-mgmt-mvp/src/main/java/com/incident/management/service/SearchCriteria.java
+/Users/patrick.fedigan/incident-mgmt-mvp/src/main/java/com/incident/management/config/AppConfig.java
+/Users/patrick.fedigan/incident-mgmt-mvp/src/main/java/com/incident/management/controller/IncidentController.java
+/Users/patrick.fedigan/incident-mgmt-mvp/src/main/java/com/incident/management/IncidentManagementApplication.java
 /Users/patrick.fedigan/incident-mgmt-mvp/src/main/java/com/incident/management/service/Comment.java

@@ -48,6 +48,53 @@
   min-height: 100px;
 }
 
+.summary-container {
+  position: relative;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.summary-container textarea {
+  flex: 1;
+  min-height: 80px;
+  resize: vertical;
+}
+
+.btn-regenerate {
+  padding: 8px 12px;
+  border: 1px solid #007bff;
+  border-radius: 4px;
+  background-color: #f8f9fa;
+  color: #007bff;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.2s;
+  white-space: nowrap;
+  min-width: 100px;
+}
+
+.btn-regenerate:hover:not(:disabled) {
+  background-color: #007bff;
+  color: white;
+}
+
+.btn-regenerate:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  border-color: #ccc;
+  color: #666;
+}
+
+.summary-note {
+  display: block;
+  margin-top: 6px;
+  font-size: 12px;
+  color: #666;
+  font-style: italic;
+}
+
 .form-actions {
   display: flex;
   gap: 12px;

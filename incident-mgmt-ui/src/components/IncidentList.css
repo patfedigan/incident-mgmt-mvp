@@ -50,6 +50,22 @@
   text-transform: uppercase;
 }
 
+.incident-summary {
+  background-color: #f8f9fa;
+  border-left: 4px solid #007bff;
+  padding: 10px 12px;
+  margin-bottom: 12px;
+  border-radius: 0 4px 4px 0;
+  font-size: 0.9em;
+  line-height: 1.4;
+  color: #495057;
+}
+
+.incident-summary strong {
+  color: #007bff;
+  font-weight: 600;
+}
+
 .incident-description {
   color: #666;
   margin-bottom: 12px;

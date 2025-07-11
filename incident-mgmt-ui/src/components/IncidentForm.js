@@ -37,6 +37,24 @@ const IncidentForm = ({ incident, onSubmit, onCancel }) => {
     if (!incident) return; // Only for existing incidents
     
     setIsGeneratingSummary(true);
+    
+    // Check if we're on GitHub Pages
+    const isGitHubPages = window.location.hostname === 'patfedigan.github.io' || 
+                         window.location.hostname.includes('github.io');
+    
+    if (isGitHubPages) {
+      // Mock summary generation for GitHub Pages
+      setTimeout(() => {
+        const mockSummary = generateMockSummary(incident);
+        setFormData(prev => ({
+          ...prev,
+          summary: mockSummary
+        }));
+        setIsGeneratingSummary(false);
+      }, 2000);
+      return;
+    }
+    
     try {
       const response = await fetch(`http://localhost:8080/api/incidents/${incident.id}/regenerate-summary`, {
         method: 'POST',
@@ -65,6 +83,28 @@ const IncidentForm = ({ incident, onSubmit, onCancel }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
+    // Check if we're on GitHub Pages
+    const isGitHubPages = window.location.hostname === 'patfedigan.github.io' || 
+                         window.location.hostname.includes('github.io');
+    
+    if (isGitHubPages) {
+      // Mock incident creation/update for GitHub Pages
+      const mockIncident = {
+        id: incident ? incident.id : `mock-${Date.now()}`,
+        ...formData,
+        createdAt: incident ? incident.createdAt : new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        comments: incident ? incident.comments || [] : [],
+        summary: formData.summary || generateMockSummary({ ...formData, id: 'new' })
+      };
+      
+      // Simulate API delay
+      setTimeout(() => {
+        onSubmit(mockIncident);
+      }, 500);
+      return;
+    }
+    
     try {
       const url = incident 
         ? `http://localhost:8080/api/incidents/${incident.id}`
@@ -90,6 +130,33 @@ const IncidentForm = ({ incident, onSubmit, onCancel }) => {
       console.error('Error saving incident:', error);
       alert('Failed to save incident: ' + error.message);
     }
+  };
+
+  // Generate mock summary for GitHub Pages demo
+  const generateMockSummary = (incidentData) => {
+    const { title, description, priority, status, assignedTo } = incidentData;
+    
+    let impact = '';
+    if (description.includes('users') || description.includes('customers')) {
+      impact = 'affecting multiple users';
+    } else if (description.includes('mobile')) {
+      impact = 'primarily affecting mobile users';
+    } else if (description.includes('email') || description.includes('SMTP')) {
+      impact = 'impacting communication systems';
+    } else {
+      impact = 'affecting system functionality';
+    }
+    
+    let resolution = '';
+    if (status === 'RESOLVED') {
+      resolution = ' and has been resolved';
+    } else if (status === 'IN_PROGRESS') {
+      resolution = ' and is currently being addressed';
+    } else if (status === 'PENDING') {
+      resolution = ' and is pending investigation';
+    }
+    
+    return `AI Summary: ${title} incident with ${priority.toLowerCase()} priority ${impact}${resolution}. Assigned to ${assignedTo}.`;
   };
 
   return (

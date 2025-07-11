@@ -26,7 +26,7 @@ jobs:
         cd incident-mgmt-ui
         npm ci
         
-    - name: Build
+    - name: Build project
       run: |
         cd incident-mgmt-ui
         npm run build

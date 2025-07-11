@@ -21,11 +21,38 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
 }
 
 .App-header h1 {
   margin: 0;
   font-size: 1.8em;
+}
+
+.github-pages-notice {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 8px;
+  padding: 8px 16px;
+  text-align: center;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  animation: pulse-glow 2s ease-in-out infinite alternate;
+}
+
+.github-pages-notice p {
+  margin: 0;
+  font-size: 0.9em;
+  font-weight: 500;
+  color: white;
+}
+
+@keyframes pulse-glow {
+  from {
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  }
+  to {
+    box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
+  }
 }
 
 .App-link {
